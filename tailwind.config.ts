@@ -12,6 +12,9 @@ export default {
         "2xl": "1400px",
       },
     },
+    fontFamily: {
+      sans: ['Nunito', 'sans-serif'],
+    },
     extend: {
       colors: {
         border: "hsl(var(--border))",
@@ -46,6 +49,21 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+        },
+        bingo: {
+          b: "hsl(var(--bingo-b))",
+          i: "hsl(var(--bingo-i))",
+          n: "hsl(var(--bingo-n))",
+          g: "hsl(var(--bingo-g))",
+          o: "hsl(var(--bingo-o))",
+        },
+        info: {
+          bg: "hsl(var(--info-bg))",
+          border: "hsl(var(--info-border))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
