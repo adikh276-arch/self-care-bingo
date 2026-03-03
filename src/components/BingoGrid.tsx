@@ -2,11 +2,31 @@ import { useState, useCallback } from "react";
 import { RefreshCw } from "lucide-react";
 
 const BINGO_TILES = [
-  "Take a 10-min walk", "Write 3 gratitudes", "Drink 8 glasses of water", "Call a friend", "Try a new recipe",
-  "Read for 20 min", "Stretch for 5 min", "Listen to calming music", "Declutter a space", "Practice deep breathing",
-  "Do a face mask", "Journal your feelings", "FREE SPACE ⭐", "Watch a sunset", "Take a power nap",
-  "Compliment someone", "Try meditation", "Cook a healthy meal", "Dance to a song", "Unplug for 1 hour",
-  "Take a bubble bath", "Do a random act of kindness", "Go to bed early", "Try yoga", "Smile at a stranger",
+  { emoji: "🚶", text: "Take a 10-min walk" },
+  { emoji: "💧", text: "Drink 8 glasses of water" },
+  { emoji: "📞", text: "Call a friend" },
+  { emoji: "📝", text: "Write 3 gratitudes" },
+  { emoji: "😴", text: "Take a power nap" },
+  { emoji: "🧘", text: "Stretch for 5 min" },
+  { emoji: "🥗", text: "Cook a healthy meal" },
+  { emoji: "🎵", text: "Listen to calming music" },
+  { emoji: "🌬️", text: "Practice deep breathing" },
+  { emoji: "📖", text: "Read for 20 min" },
+  { emoji: "🛁", text: "Take a bubble bath" },
+  { emoji: "🌳", text: "Journal your feelings" },
+  { emoji: "⭐", text: "FREE SPACE" },
+  { emoji: "🧹", text: "Declutter a space" },
+  { emoji: "🎨", text: "Try a new recipe" },
+  { emoji: "🧘‍♀️", text: "Try meditation" },
+  { emoji: "😌", text: "Do a face mask" },
+  { emoji: "📵", text: "Unplug for 1 hour" },
+  { emoji: "💬", text: "Compliment someone" },
+  { emoji: "💊", text: "Watch a sunset" },
+  { emoji: "🐱", text: "Smile at a stranger" },
+  { emoji: "☕", text: "Do a random act of kindness" },
+  { emoji: "📓", text: "Go to bed early" },
+  { emoji: "❤️", text: "Try yoga" },
+  { emoji: "💃", text: "Dance to a song" },
 ];
 
 const BINGO_LETTERS = [
@@ -100,11 +120,12 @@ const BingoGrid = () => {
                 }
               `}
             >
+              <span className="text-xl mb-0.5">{tile.emoji}</span>
               {isCompleted && !isFreeSpace && (
-                <span className="text-base mb-0.5">✅</span>
+                <span className="text-[10px] mb-0.5">✅</span>
               )}
-              <span className={isCompleted && !isFreeSpace ? "line-through opacity-70" : ""}>
-                {tile}
+              <span className={`text-[10px] leading-tight ${isCompleted && !isFreeSpace ? "line-through opacity-70" : ""}`}>
+                {tile.text}
               </span>
             </button>
           );
