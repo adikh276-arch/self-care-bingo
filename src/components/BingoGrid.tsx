@@ -1,53 +1,56 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { RefreshCw } from "lucide-react";
 import confetti from "canvas-confetti";
-
-const BINGO_TILES = [
-  { emoji: "🚶", text: "Take a 10-min walk" },
-  { emoji: "💧", text: "Drink 8 glasses of water" },
-  { emoji: "📞", text: "Call a friend" },
-  { emoji: "📝", text: "Write 3 gratitudes" },
-  { emoji: "😴", text: "Take a power nap" },
-  { emoji: "🧘", text: "Stretch for 5 min" },
-  { emoji: "🥗", text: "Cook a healthy meal" },
-  { emoji: "🎵", text: "Listen to calming music" },
-  { emoji: "🌬️", text: "Practice deep breathing" },
-  { emoji: "📖", text: "Read for 20 min" },
-  { emoji: "🛁", text: "Take a bubble bath" },
-  { emoji: "🌳", text: "Journal your feelings" },
-  { emoji: "⭐", text: "FREE SPACE" },
-  { emoji: "🧹", text: "Declutter a space" },
-  { emoji: "🎨", text: "Try a new recipe" },
-  { emoji: "🧘‍♀️", text: "Try meditation" },
-  { emoji: "😌", text: "Do a face mask" },
-  { emoji: "📵", text: "Unplug for 1 hour" },
-  { emoji: "💬", text: "Compliment someone" },
-  { emoji: "💊", text: "Watch a sunset" },
-  { emoji: "🐱", text: "Smile at a stranger" },
-  { emoji: "☕", text: "Do a random act of kindness" },
-  { emoji: "📓", text: "Go to bed early" },
-  { emoji: "❤️", text: "Try yoga" },
-  { emoji: "💃", text: "Dance to a song" },
-];
-
-const BINGO_LETTERS = [
-  { letter: "B", colorClass: "bg-bingo-b" },
-  { letter: "I", colorClass: "bg-bingo-i" },
-  { letter: "N", colorClass: "bg-bingo-n" },
-  { letter: "G", colorClass: "bg-bingo-g" },
-  { letter: "O", colorClass: "bg-bingo-o" },
-];
+import { useTranslation } from "react-i18next";
 
 const BingoGrid = () => {
+  const { t } = useTranslation();
+
+  const BINGO_TILES = useMemo(() => [
+    { emoji: "🚶", text: t('tiles.walk') },
+    { emoji: "💧", text: t('tiles.water') },
+    { emoji: "📞", text: t('tiles.friend') },
+    { emoji: "📝", text: t('tiles.gratitudes') },
+    { emoji: "😴", text: t('tiles.nap') },
+    { emoji: "🧘", text: t('tiles.stretch') },
+    { emoji: "🥗", text: t('tiles.cook') },
+    { emoji: "🎵", text: t('tiles.music') },
+    { emoji: "🌬️", text: t('tiles.breathing') },
+    { emoji: "📖", text: t('tiles.read') },
+    { emoji: "🛁", text: t('tiles.bath') },
+    { emoji: "🌳", text: t('tiles.journal') },
+    { emoji: "⭐", text: t('tiles.free_space') },
+    { emoji: "🧹", text: t('tiles.declutter') },
+    { emoji: "🎨", text: t('tiles.recipe') },
+    { emoji: "🧘‍♀️", text: t('tiles.meditation') },
+    { emoji: "😌", text: t('tiles.mask') },
+    { emoji: "📵", text: t('tiles.unplug') },
+    { emoji: "💬", text: t('tiles.compliment') },
+    { emoji: "💊", text: t('tiles.sunset') },
+    { emoji: "🐱", text: t('tiles.smile') },
+    { emoji: "☕", text: t('tiles.kindness') },
+    { emoji: "📓", text: t('tiles.sleep') },
+    { emoji: "❤️", text: t('tiles.yoga') },
+    { emoji: "💃", text: t('tiles.dance') },
+  ], [t]);
+
+  const BINGO_LETTERS = [
+    { letter: "B", colorClass: "bg-bingo-b" },
+    { letter: "I", colorClass: "bg-bingo-i" },
+    { letter: "N", colorClass: "bg-bingo-n" },
+    { letter: "G", colorClass: "bg-bingo-g" },
+    { letter: "O", colorClass: "bg-bingo-o" },
+  ];
+
   const [completed, setCompleted] = useState<Set<number>>(() => new Set([12])); // FREE SPACE
 
   const WINNING_LINES = [
     // rows
-    [0,1,2,3,4],[5,6,7,8,9],[10,11,12,13,14],[15,16,17,18,19],[20,21,22,23,24],
+    [0, 1, 2, 3, 4], [5, 6, 7, 8, 9], [10, 11, 12, 13, 14], [15, 16, 17, 18, 19], [20, 21, 22, 23, 24],
     // cols
-    [0,5,10,15,20],[1,6,11,16,21],[2,7,12,17,22],[3,8,13,18,23],[4,9,14,19,24],
+    [0, 5, 10, 15, 20], [1, 6, 11, 16, 21], [2, 7, 12, 17, 22], [3, 8, 13, 18, 23], [4, 9, 14, 19, 24],
     // diagonals
-    [0,6,12,18,24],[4,8,12,16,20],
+    [0, 6, 12, 18, 24], [4, 8, 12, 16, 20],
   ];
 
   const [wonLines, setWonLines] = useState<Set<number>>(() => new Set());
@@ -118,10 +121,10 @@ const BingoGrid = () => {
       {/* Let's Play Header */}
       <div className="text-center space-y-1">
         <h2 className="text-2xl font-extrabold text-foreground">
-          Let's Play! 🎯
+          {t('lets_play')}
         </h2>
         <p className="text-muted-foreground text-sm">
-          Click on each activity to complete it. Get a row, column, or diagonal to shout
+          {t('instructions').split('BINGO!')[0]}
           <span className="font-bold text-primary"> BINGO!</span>
         </p>
       </div>
@@ -129,8 +132,8 @@ const BingoGrid = () => {
       {/* Progress */}
       <div className="bg-card rounded-2xl p-4 shadow-sm border border-border">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-semibold text-foreground">📊 Your Progress</span>
-          <span className="text-sm text-muted-foreground">{progress} of 25 activities</span>
+          <span className="text-sm font-semibold text-foreground">{t('progress_title')}</span>
+          <span className="text-sm text-muted-foreground">{t('progress_count', { count: progress })}</span>
         </div>
         <div className="w-full h-3 bg-muted rounded-full overflow-hidden">
           <div
@@ -192,7 +195,7 @@ const BingoGrid = () => {
           className="bg-primary text-primary-foreground px-6 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2 hover:opacity-90 transition-opacity shadow-sm"
         >
           <RefreshCw className="w-4 h-4" />
-          New Board
+          {t('new_board')}
         </button>
       </div>
     </div>

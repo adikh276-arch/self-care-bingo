@@ -1,15 +1,19 @@
+import { useTranslation } from "react-i18next";
+
 const TipsForSuccess = () => {
+  const { t } = useTranslation();
+
   const tips = [
-    { emoji: "🌱", title: "Start Small", desc: "Pick one or two tiles to begin the integration." },
-    { emoji: "🔄", title: "Be Routine", desc: "Try to incorporate a few daily or weekly habits." },
-    { emoji: "🎉", title: "Celebrate Wins", desc: "Acknowledge every tile you complete!" },
-    { emoji: "✨", title: "Make It Yours", desc: "Modify activities to fit your lifestyle and preferences." },
+    { emoji: "🌱", title: t('tip1_title'), desc: t('tip1_desc') },
+    { emoji: "🔄", title: t('tip2_title'), desc: t('tip2_desc') },
+    { emoji: "🎉", title: t('tip3_title'), desc: t('tip3_desc') },
+    { emoji: "✨", title: t('tip4_title'), desc: t('tip4_desc') },
   ];
 
   return (
     <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
       <h2 className="text-xl font-bold text-foreground flex items-center gap-2 mb-4">
-        <span className="text-2xl">💡</span> Tips for Success
+        <span className="text-2xl">💡</span> {t('tips_title')}
       </h2>
       <div className="grid grid-cols-2 gap-4">
         {tips.map((tip) => (

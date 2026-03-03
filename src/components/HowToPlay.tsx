@@ -1,13 +1,16 @@
 import { BookOpen, CheckCircle, Sparkles } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const HowToPlay = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
       <h2 className="text-xl font-bold text-foreground flex items-center gap-2 mb-4">
-        <span className="text-2xl">📋</span> How to Play
+        <span className="text-2xl">📋</span> {t('how_to_play')}
       </h2>
       <p className="text-muted-foreground mb-4">
-        Our Self-Care Bingo card includes <span className="font-bold">25 activities</span> designed to nurture your mind, body, and soul.
+        {t('intro')}
       </p>
       <div className="space-y-3">
         <div className="flex items-start gap-3">
@@ -15,7 +18,7 @@ const HowToPlay = () => {
             <BookOpen className="w-4 h-4" />
           </span>
           <p className="text-muted-foreground">
-            <span className="font-semibold text-foreground">Read</span> a tile, <span className="font-semibold text-foreground">complete</span> the activity.
+            <span className="font-semibold text-foreground">{t('step1_title')}</span> {t('step1_desc')}
           </p>
         </div>
         <div className="flex items-start gap-3">
@@ -23,7 +26,7 @@ const HowToPlay = () => {
             <CheckCircle className="w-4 h-4" />
           </span>
           <p className="text-muted-foreground">
-            <span className="font-semibold text-foreground">Click</span> a tile to mark it <span className="font-semibold text-foreground">complete</span>.
+            <span className="font-semibold text-foreground">{t('step2_title')}</span> {t('step2_desc')}
           </p>
         </div>
         <div className="flex items-start gap-3">
@@ -31,7 +34,7 @@ const HowToPlay = () => {
             <Sparkles className="w-4 h-4" />
           </span>
           <p className="text-muted-foreground">
-            Each request is a small, yet powerful step toward better mental health 💙
+            {t('step3_desc')}
           </p>
         </div>
       </div>
