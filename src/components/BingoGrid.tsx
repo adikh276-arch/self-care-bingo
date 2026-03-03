@@ -41,34 +41,31 @@ const BINGO_LETTERS = [
 const BingoGrid = () => {
   const [completed, setCompleted] = useState<Set<number>>(() => new Set([12])); // FREE SPACE
 
-  const fireSmallConfetti = useCallback(() => {
+  const WINNING_LINES = [
+    // rows
+    [0,1,2,3,4],[5,6,7,8,9],[10,11,12,13,14],[15,16,17,18,19],[20,21,22,23,24],
+    // cols
+    [0,5,10,15,20],[1,6,11,16,21],[2,7,12,17,22],[3,8,13,18,23],[4,9,14,19,24],
+    // diagonals
+    [0,6,12,18,24],[4,8,12,16,20],
+  ];
+
+  const [wonLines, setWonLines] = useState<Set<number>>(() => new Set());
+
+  const fireLineConfetti = useCallback(() => {
     confetti({
-      particleCount: 30,
-      spread: 60,
-      origin: { y: 0.7 },
+      particleCount: 60,
+      spread: 80,
+      origin: { y: 0.6 },
       colors: ["#FF6B8A", "#845EC2", "#FFC75F", "#00C9A7", "#4B93FF"],
-      scalar: 0.8,
     });
   }, []);
 
   const fireBigCelebration = useCallback(() => {
-    const duration = 3000;
-    const end = Date.now() + duration;
+    const end = Date.now() + 3000;
     const frame = () => {
-      confetti({
-        particleCount: 5,
-        angle: 60,
-        spread: 55,
-        origin: { x: 0 },
-        colors: ["#FF6B8A", "#845EC2", "#FFC75F", "#00C9A7", "#4B93FF"],
-      });
-      confetti({
-        particleCount: 5,
-        angle: 120,
-        spread: 55,
-        origin: { x: 1 },
-        colors: ["#FF6B8A", "#845EC2", "#FFC75F", "#00C9A7", "#4B93FF"],
-      });
+      confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ["#FF6B8A", "#845EC2", "#FFC75F", "#00C9A7", "#4B93FF"] });
+      confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ["#FF6B8A", "#845EC2", "#FFC75F", "#00C9A7", "#4B93FF"] });
       if (Date.now() < end) requestAnimationFrame(frame);
     };
     frame();
@@ -82,20 +79,35 @@ const BingoGrid = () => {
         next.delete(index);
       } else {
         next.add(index);
-        setTimeout(() => {
+      }
+
+      // Check for new completed lines
+      setTimeout(() => {
+        setWonLines((prevWon) => {
+          const newWon = new Set(prevWon);
+          let newLineCompleted = false;
+          WINNING_LINES.forEach((line, i) => {
+            if (!prevWon.has(i) && line.every((idx) => next.has(idx))) {
+              newWon.add(i);
+              newLineCompleted = true;
+            }
+          });
           if (next.size === 25) {
             fireBigCelebration();
-          } else {
-            fireSmallConfetti();
+          } else if (newLineCompleted) {
+            fireLineConfetti();
           }
-        }, 50);
-      }
+          return newWon;
+        });
+      }, 50);
+
       return next;
     });
-  }, [fireSmallConfetti, fireBigCelebration]);
+  }, [fireLineConfetti, fireBigCelebration]);
 
   const resetBoard = () => {
     setCompleted(new Set([12]));
+    setWonLines(new Set());
   };
 
   const progress = completed.size;
