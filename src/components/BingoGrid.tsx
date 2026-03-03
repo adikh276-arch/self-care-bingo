@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { RefreshCw } from "lucide-react";
+import confetti from "canvas-confetti";
 
 const BINGO_TILES = [
   { emoji: "🚶", text: "Take a 10-min walk" },
@@ -40,18 +41,58 @@ const BINGO_LETTERS = [
 const BingoGrid = () => {
   const [completed, setCompleted] = useState<Set<number>>(() => new Set([12])); // FREE SPACE
 
+  const fireSmallConfetti = useCallback(() => {
+    confetti({
+      particleCount: 30,
+      spread: 60,
+      origin: { y: 0.7 },
+      colors: ["#FF6B8A", "#845EC2", "#FFC75F", "#00C9A7", "#4B93FF"],
+      scalar: 0.8,
+    });
+  }, []);
+
+  const fireBigCelebration = useCallback(() => {
+    const duration = 3000;
+    const end = Date.now() + duration;
+    const frame = () => {
+      confetti({
+        particleCount: 5,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 },
+        colors: ["#FF6B8A", "#845EC2", "#FFC75F", "#00C9A7", "#4B93FF"],
+      });
+      confetti({
+        particleCount: 5,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 },
+        colors: ["#FF6B8A", "#845EC2", "#FFC75F", "#00C9A7", "#4B93FF"],
+      });
+      if (Date.now() < end) requestAnimationFrame(frame);
+    };
+    frame();
+  }, []);
+
   const toggleTile = useCallback((index: number) => {
     setCompleted((prev) => {
       const next = new Set(prev);
       if (next.has(index)) {
-        if (index === 12) return next; // can't uncheck free space
+        if (index === 12) return next;
         next.delete(index);
       } else {
         next.add(index);
+        setTimeout(() => {
+          if (next.size === 25) {
+            fireBigCelebration();
+          } else {
+            fireSmallConfetti();
+          }
+        }, 50);
       }
       return next;
     });
-  }, []);
+  }, [fireSmallConfetti, fireBigCelebration]);
 
   const resetBoard = () => {
     setCompleted(new Set([12]));
